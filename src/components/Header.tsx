@@ -1,30 +1,46 @@
 import * as React from "react";
-
 import {Avatar, AvatarFallback, AvatarImage} from "./ui/avatar"
+import { formatPrice, formatPercent } from "@/util/formatter.ts";
+import {ItemPrice} from "@/features/dto/ItemResponse.ts";
+import {Item} from "@/model/item.ts";
 
-const Header: React.FC<{ image: string, name: string }> = (props) => {
 
-    const startPrice = 100
-    const price = 0
+const Header: React.FC<{
+    gemInfo : Item, gemPrice : ItemPrice
+}> = (props) => {
+    const info = props.gemInfo;
+    const price = props.gemPrice;
+
+    const currentPrice = formatPrice(price.price);
+    const lowPrice = formatPrice(price.lowPrice);
+    const highPrice = formatPrice(price.highPrice);
+    const priceChange = formatPrice(price.priceChange)
+    const priceChangeRate = formatPercent(price.priceChangeRate);
 
     return (
-        <div className={"flex justify-between"}>
+        <div className={"flex justify-between w-full"}>
             <div className={"flex justify-between"}>
                 <Avatar>
-                    <AvatarImage src={props.image}/>
+                    <AvatarImage src={info.image}/>
                     <AvatarFallback>Gem</AvatarFallback>
                 </Avatar>
                 <div className={"ml-2"}>
-                    <div>{props.name}</div>
+                    <div>{info.name}</div>
                     <div className={"flex justify-end"}>
-                        <p>300G</p>
-                        <p className={"ml-1"}>100%({price-startPrice})</p>
+                        <p>{currentPrice}</p>
+                        <p className={"ml-1"}>{priceChange}({priceChangeRate})</p>
                     </div>
                 </div>
             </div>
             <div>
-                <p>{"최고가"}</p>
-                <p>{"최저가"}</p>
+                <div>
+                    <h6>최고가</h6>
+                    <h6>{highPrice}</h6>
+                </div>
+                <div>
+                    <h6>최저가</h6>
+                    <h6>{lowPrice}</h6>
+                </div>
             </div>
         </div>
     )

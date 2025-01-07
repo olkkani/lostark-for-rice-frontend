@@ -5,39 +5,37 @@ import lv8Blazing from "../assets/8레벨작열.webp"
 import lv10Annihilation from "../assets/10레벨멸화.webp"
 import lv10CrimsonFlame from "../assets/10레벨홍염.webp"
 
-class PriceRecord {
+export interface PriceRecord {
     time: string;
     open: number;
     high: number;
     low: number;
     close: number;
-
-    constructor(time: string, open: number, high: number, low: number, close: number) {
-        this.time = time;
-        this.open = open;
-        this.high = high;
-        this.low = low;
-        this.close = close;
-    }
 }
-class RecentPriceTrend {
+
+interface RecentPriceTrend {
     time: string;
     price: number;
     priceChangePrev: number;
     priceChangeRatePrev: number;
     priceChangePairItem: number;
     priceChangeRatePairItem: number;
-
-    constructor(time: string, price: number, priceChangePrev: number, priceChangeRatePrev: number, priceChangePairItem: number, priceChangeRatePairItem: number) {
-        this.time = time;
-        this.price = price;
-        this.priceChangePrev = priceChangePrev;
-        this.priceChangeRatePrev = priceChangeRatePrev;
-        this.priceChangePairItem = priceChangePairItem;
-        this.priceChangeRatePairItem = priceChangeRatePairItem;
-    }
 }
-class Item {
+
+export interface Item {
+    id: number;
+    name: string;
+    pairItemId: number;
+    image: string;
+    // price?: number;
+    // priceChange?: number;
+    // priceChangeRate?: number;
+    // highPrice?: number;
+    // lowPrice?: number;
+    // priceRecords?: PriceRecord[];
+    // recentPriceTrends?: RecentPriceTrend[];
+}
+export class Item2 {
     id: number;
     name: string;
     pairItemId: number;
@@ -96,20 +94,26 @@ class Item {
     }
 }
 
-
-
-
-const items = [
-    new Item(65031100 , '10레벨 겁화의 보석', 65032100, lv10DoomFire),
-    new Item(65032100 , '10레벨 작열의 보석', 65031100, lv10Blazing),
-    new Item(65031080 , '8레벨 겁화의 보석', 65032080, lv8DoomFire),
-    new Item(65032080 , '8레벨 작열의 보석', 65031080, lv8Blazing),
-    new Item(65021100 , '10레벨 멸화의 보석', 65022100, lv10Annihilation),
-    new Item(65022100 , '10레벨 홍염의 보석', 65021100, lv10CrimsonFlame),
+export const Items = [
+    {id: 65031100, name: '10레벨 겁화의 보석', pairItemId: 65032100, image: lv10DoomFire},
+    {id: 65032100, name: '10레벨 작열의 보석', pairItemId: 65031100, image: lv10Blazing},
+    {id: 65031080, name: '8레벨 겁화의 보석', pairItemId: 65032080, image: lv8DoomFire},
+    {id: 65032080, name: '8레벨 작열의 보석', pairItemId: 65031080, image: lv8Blazing},
+    {id: 65021100, name: '10레벨 멸화의 보석', pairItemId: 65022100, image: lv10Annihilation},
+    {id: 65022100, name: '10레벨 홍염의 보석', pairItemId: 65021100, image: lv10CrimsonFlame}
 ]
 
-export default items;
 
+// export const Items = [
+    // {id:65031100 }
+
+    // new Item(65031100 , '10레벨 겁화의 보석', 65032100, lv10DoomFire),
+    // new Item(65032100 , '10레벨 작열의 보석', 65031100, lv10Blazing),
+    // new Item(65031080 , '8레벨 겁화의 보석', 65032080, lv8DoomFire),
+    // new Item(65032080 , '8레벨 작열의 보석', 65031080, lv8Blazing),
+    // new Item(65021100 , '10레벨 멸화의 보석', 65022100, lv10Annihilation),
+    // new Item(65022100 , '10레벨 홍염의 보석', 65021100, lv10CrimsonFlame),
+// ]
 
 export const gemData = [
     {
