@@ -6,12 +6,17 @@ export const formatPercent = (num: number): string => {
         style: 'percent',
     });
 
-    return formatter.format(num / 100); // 100으로 나누어 퍼센트 값으로 변환
+    return formatter.format(num/10000); // 100으로 나누어 퍼센트 값으로 변환
 };
 
 export const formatPrice = (num: number): string => {
     return new Intl.NumberFormat('ko-KR', {
+        // signDisplay: 'exceptZero',
+    }).format(num) + "G";
+};
+
+export const formatPriceWithNotSign = (num: number): string => {
+    return new Intl.NumberFormat('ko-KR', {
         signDisplay: 'exceptZero',
-        style: 'decimal'
     }).format(num);
 };

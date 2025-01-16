@@ -4,6 +4,12 @@ module.exports = {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+		  width: {
+			'half-screen': '50vw',
+		  },
+		maxWidth: {
+			'half-screen': '50vw',
+		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
