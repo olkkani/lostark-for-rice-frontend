@@ -2,9 +2,10 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getPricesByItemCode } from "@/features/api/item.ts";
 import { useSelectedGemStore } from "@/store/useSelectedGemStore.ts";
-import ChartComponent from "@/components/ChartComponent.tsx";
+import CandlestickChart from "@/components/CandlestickChart.tsx";
 import { ItemPricesResponse } from "@/features/dto/ItemResponse.ts";
 import PriceTrendChart from "./PriceTrendChart";
+import ChartComponent from "./ChartComponent";
 
 const ChartTableComponent: React.FC<{}> = () => {
   const { selectedGem } = useSelectedGemStore();
@@ -42,7 +43,7 @@ const ChartTableComponent: React.FC<{}> = () => {
     content = (
       <>
         <ChartComponent data={responseData}></ChartComponent>
-        {/*<CandlestickChart data={responseData} />*/}
+        {/* <CandlestickChart data={responseData} /> */}
         <PriceTrendChart></PriceTrendChart>
       </>
     );

@@ -52,17 +52,7 @@ const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = (props) => {
       window.removeEventListener("resize", handleResize);
       chart.remove();
     };
-  }, [
-    chartData,
-    colors.backgroundColor,
-    colors.borderVisible,
-    colors.downColor,
-    colors.lineColor,
-    colors.textColor,
-    colors.upColor,
-    colors.wickDownColor,
-    colors.wickUpColor,
-  ]);
+  }, [chartData, colors]);
 
   return <div ref={chartContainerRef}></div>;
 };
