@@ -11,8 +11,11 @@ export interface ItemResponse {
     }
 }
 
+
+const baseUrl = process.env.REACT_APP_API_URL
+
 export async function getAllKindsItemPrice() {
-    const response = await ky('http://43.201.2.177:18082/items/prices/today', {
+    const response = await ky(`${baseUrl}/items/prices/today`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -26,7 +29,7 @@ export async function getAllKindsItemPrice() {
 }
 
 export async function getPricesByItemCode(itemCode: number) {
-    const response = await ky(`http://43.201.2.177:18082/items/${itemCode}/prices`, {
+    const response = await ky(`${baseUrl}/${itemCode}/prices`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
