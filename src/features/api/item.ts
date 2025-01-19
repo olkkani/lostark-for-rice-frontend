@@ -12,7 +12,8 @@ export interface ItemResponse {
 }
 
 
-const baseUrl = process.env.REACT_APP_API_URL
+// const baseUrl = import.meta.env.VITE_APP_API_URL
+const baseUrl = "http://43.201.2.177:18082"
 
 export async function getAllKindsItemPrice() {
     const response = await ky(`${baseUrl}/items/prices/today`, {

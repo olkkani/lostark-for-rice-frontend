@@ -2,7 +2,6 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getPricesByItemCode } from "@/features/api/item.ts";
 import { useSelectedGemStore } from "@/store/useSelectedGemStore.ts";
-import CandlestickChart from "@/components/CandlestickChart.tsx";
 import { ItemPricesResponse } from "@/features/dto/ItemResponse.ts";
 import PriceTrendChart from "./PriceTrendChart";
 import ChartComponent from "./ChartComponent";
