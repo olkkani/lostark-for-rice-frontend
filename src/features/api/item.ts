@@ -1,5 +1,5 @@
 import ky from "ky";
-import {ItemPreviewResponse} from "@/features/dto/ItemResponse.ts";
+import {ItemPreviewResponse, ItemPricesResponse} from "@/features/dto/ItemResponse.ts";
 
 export interface ItemResponse {
     itemCode: number,
@@ -10,8 +10,13 @@ export interface ItemResponse {
         low: number,
     }
 }
+
+
+// const baseUrl = import.meta.env.VITE_APP_API_URL
+const baseUrl = "http://43.201.2.177:18082"
+
 export async function getAllKindsItemPrice() {
-    const response = await ky('http://localhost:8080/items/prices/today', {
+    const response = await ky(`${baseUrl}/items/prices/today`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -22,8 +27,18 @@ export async function getAllKindsItemPrice() {
 
     }
     return await response.json<ItemPreviewResponse[]>();
-    // return await response.json<ItemResponse>();
 }
 
-// export async function getPricesByItemCode(itemCode: number) {
-// }
+export async function getPricesByItemCode(itemCode: number) {
+    const response = await ky(`${baseUrl}/${itemCode}/prices`, {
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+    });
+    if (!response.ok) {
+        throw new Error(`Fetch error: ${response.statusText}`);
+
+    }
+    return await response.json<ItemPricesResponse[]>();
+}

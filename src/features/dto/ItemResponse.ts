@@ -8,6 +8,13 @@ export interface ItemPreviewResponse {
         priceChangeRate: number
     }
 }
+export interface ItemPricesResponse {
+    open: number,
+    high: number,
+    low: number,
+    close: number,
+    time: string
+}
 
 export interface ItemPrice {
     price: number,
