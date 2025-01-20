@@ -42,7 +42,6 @@ const ChartTableComponent: React.FC<{}> = () => {
     content = (
       <>
         <ChartComponent data={responseData}></ChartComponent>
-        {/* <CandlestickChart data={responseData} /> */}
         <PriceTrendChart></PriceTrendChart>
       </>
     );
