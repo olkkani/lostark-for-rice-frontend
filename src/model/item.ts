@@ -1,9 +1,9 @@
-import lv10DoomFire from "@assets/10레벨겁화.webp"
-import lv10Blazing from "@assets/10레벨작열.webp"
-import lv8DoomFire from "@assets/8레벨겁화.webp"
-import lv8Blazing from "@assets/8레벨작열.webp"
-import lv10Annihilation from "@assets/10레벨멸화.webp"
-import lv10CrimsonFlame from "@assets/10레벨홍염.webp"
+import lv10DoomFire from "@assets/lv10DoomFire.webp"
+import lv10Blazing from "@assets/lv10Blazing.webp"
+import lv8DoomFire from "@assets/lv8DoomFire.webp"
+import lv8Blazing from "@assets/lv8Blazing.webp"
+import lv10Annihilation from "@assets/lv10Annihilation.webp"
+import lv10CrimsonFlame from "@assets/lv10CrimsonFlame.webp"
 
 export interface PriceRecord {
     time: string;
