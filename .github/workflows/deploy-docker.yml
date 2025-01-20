@@ -46,11 +46,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.OLKK_GITHUB_TOKEN }}
 
+      - name: List directory contents
+        run: ls -R
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./dist/Dockerfile
+          file: ./Dockerfile
           push: true
           tags: ${{ env.IMAGE_NAME }}
 
