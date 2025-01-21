@@ -1,5 +1,5 @@
 # 빌드 스테이지
-FROM node:lts-alpine as build
+FROM node:lts-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm install

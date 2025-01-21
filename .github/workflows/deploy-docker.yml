@@ -71,10 +71,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
+            composePath="./docker-compose.yml"
 
 
+            # Nginx를 현재 동작여부로 구분해서 실행
             if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
-              docker-compose up -d nginx
+              docker-compose -f $composePath up -d nginx
             else
               echo "Nginx container already exists"
             fi
@@ -92,8 +94,8 @@ jobs:
             fi
 
             # 새 서비스 빌드 및 실행
-            IMAGE_NAME=${{ env.IMAGE_NAME }} docker-compose pull $NEW_SERVICE
-            IMAGE_NAME=${{ env.IMAGE_NAME }} docker-compose up -d --no-deps $NEW_SERVICE
+            IMAGE_NAME=${{ env.IMAGE_NAME }} docker-compose -f $composePath pull $NEW_SERVICE
+            IMAGE_NAME=${{ env.IMAGE_NAME }} docker-compose -f $composePath up -d --no-deps $NEW_SERVICE
 
             sleep 30  # 또는 더 정교한 헬스 체크 로직
 
@@ -101,7 +103,7 @@ jobs:
             # 여기에 Nginx 설정 업데이트 로직 추가
 
             # 이전 서비스 중지
-            docker-compose stop $OLD_SERVICE
+            docker-compose -f $composePath stop $OLD_SERVICE
 
             # 사용하지 않는 이미지 정리
             docker image prune -f
