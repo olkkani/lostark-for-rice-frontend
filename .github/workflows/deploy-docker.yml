@@ -94,7 +94,6 @@ jobs:
             cd /home/${{ secrets.USERNAME }}/lfr-f
             composePath="./docker-compose.yml"
 
-
             # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
             if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
               sudo docker compose -f $composePath up -d nginx

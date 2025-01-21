@@ -34,6 +34,6 @@ services:
     networks:
       - olkkani_network
     volumes:
-      - ./front_nginx.conf:/etc/nginx/conf.d/front_nginx.conf
+      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
       - ./build:/usr/share/nginx/html
     restart: always
