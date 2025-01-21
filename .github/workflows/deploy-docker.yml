@@ -71,14 +71,37 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            APP_NAME="lfr-f"
-            NEW_ENV="blue"
 
-            # 1. 최신 Docker 이미지 가져오기
-            docker pull ${{ env.IMAGE_NAME }}
 
-            # 2. 새로운 컨테이너 실행
-            docker run -d -p 18081:5173 --name $APP_NAME-$NEW_ENV  \
-            --network olkkani_network \
-            -e TZ=Asia/Seoul \
-            ${{ env.IMAGE_NAME }}
+            if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
+              docker-compose up -d nginx
+            else
+              echo "Nginx container already exists"
+            fi
+
+            # 현재 활성 서비스 확인
+            ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-f-blue|lfr-f-green" | head -n1)
+
+            # 비활성 서비스 결정
+            if [ "$ACTIVE_SERVICE" = "lfr-f-blue" ]; then
+              NEW_SERVICE="green"
+              OLD_SERVICE="blue"
+            else
+              NEW_SERVICE="blue"
+              OLD_SERVICE="green"
+            fi
+
+            # 새 서비스 빌드 및 실행
+            IMAGE_NAME=${{ env.IMAGE_NAME }} docker-compose pull $NEW_SERVICE
+            IMAGE_NAME=${{ env.IMAGE_NAME }} docker-compose up -d --no-deps $NEW_SERVICE
+
+            sleep 30  # 또는 더 정교한 헬스 체크 로직
+
+            # 트래픽을 새 서비스로 전환 (예: Nginx 설정 업데이트)
+            # 여기에 Nginx 설정 업데이트 로직 추가
+
+            # 이전 서비스 중지
+            docker-compose stop $OLD_SERVICE
+
+            # 사용하지 않는 이미지 정리
+            docker image prune -f
