@@ -29,7 +29,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: install dependencies
+      - name: Install dependencies
         if: ${{ steps.npm-cache.outputs.cache-hit != 'true' }}
         run: npm ci
 
@@ -46,9 +46,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.OLKK_GITHUB_TOKEN }}
 
-      - name: List directory contents
-        run: ls -R
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
@@ -64,7 +61,7 @@ jobs:
       HOST: ${{ secrets.HOST }}
     steps:
       - name: Deploy
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
@@ -73,12 +70,11 @@ jobs:
           script: |
             composePath="./docker-compose.yml"
 
-
-            # Nginx를 현재 동작여부로 구분해서 실행
+            # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
             if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
               docker-compose -f $composePath up -d nginx
             else
-              echo "Nginx container already exists"
+              echo "Nginx 컨테이너가 이미 존재합니다."
             fi
 
             # 현재 활성 서비스 확인
