@@ -37,6 +37,3 @@ services:
       - ./front_nginx.conf:/etc/nginx/conf.d/front_nginx.conf
       - ./build:/usr/share/nginx/html
     restart: always
-    depends_on:
-      - blue
-      - green

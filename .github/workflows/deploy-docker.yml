@@ -94,12 +94,14 @@ jobs:
             cd /home/${{ secrets.USERNAME }}/lfr-f
             composePath="./docker-compose.yml"
 
+
             # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
             if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
-              docker-compose -f $composePath up -d nginx
+              docker compose -f $composePath up -d nginx
             else
               echo "Nginx 컨테이너가 이미 존재합니다."
             fi
+
 
             # 현재 활성 서비스 확인
             ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-f-blue|lfr-f-green" | head -n1)
@@ -114,8 +116,8 @@ jobs:
             fi
 
             # 새 서비스 빌드 및 실행
-            IMAGE_NAME=${{ env.IMAGE_NAME }} docker-compose -f $composePath pull $NEW_SERVICE
-            IMAGE_NAME=${{ env.IMAGE_NAME }} docker-compose -f $composePath up -d --no-deps $NEW_SERVICE
+            IMAGE_NAME=${{ env.IMAGE_NAME }} docker compose -f $composePath pull $NEW_SERVICE
+            IMAGE_NAME=${{ env.IMAGE_NAME }} docker compose -f $composePath up -d --no-deps $NEW_SERVICE
 
             sleep 30  # 또는 더 정교한 헬스 체크 로직
 
@@ -123,7 +125,7 @@ jobs:
             # 여기에 Nginx 설정 업데이트 로직 추가
 
             # 이전 서비스 중지
-            docker-compose -f $composePath stop $OLD_SERVICE
+            docker compose -f $composePath stop $OLD_SERVICE
 
             # 사용하지 않는 이미지 정리
             docker image prune -f
