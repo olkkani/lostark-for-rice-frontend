@@ -9,6 +9,6 @@ RUN npm run build
 # 프로덕션 스테이지
 FROM nginx:alpine
 COPY --from=build /app/build /usr/share/nginx/html
-COPY default.conf /etc/nginx/conf.d/default.conf
+COPY front_nginx.conf /etc/nginx/conf.d/front_nginx.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
