@@ -97,7 +97,7 @@ jobs:
 
             # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
             if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
-              docker compose -f $composePath up -d nginx
+              sudo docker compose -f $composePath up -d nginx
             else
               echo "Nginx 컨테이너가 이미 존재합니다."
             fi
