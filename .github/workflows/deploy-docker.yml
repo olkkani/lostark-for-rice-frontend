@@ -94,14 +94,6 @@ jobs:
             cd /home/${{ secrets.USERNAME }}/lfr-f
             composePath="./docker-compose.yml"
 
-            # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
-            if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
-              sudo docker compose -f $composePath up -d nginx
-            else
-              echo "Nginx 컨테이너가 이미 존재합니다."
-            fi
-
-
             # 현재 활성 서비스 확인
             ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-f-blue|lfr-f-green" | head -n1)
 
@@ -128,3 +120,11 @@ jobs:
 
             # 사용하지 않는 이미지 정리
             docker image prune -f
+
+
+            # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
+            if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
+              sudo docker compose -f $composePath up -d nginx
+            else
+              echo "Nginx 컨테이너가 이미 존재합니다."
+            fi
