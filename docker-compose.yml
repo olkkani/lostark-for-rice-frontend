@@ -33,7 +33,9 @@ services:
       - "443:443"
     networks:
       - olkkani_network
+    environment:
+      - TZ=Asia/Seoul
     volumes:
-      - /home/ec2-user/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - /home/ec2-user/lfr-f/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - ./build:/usr/share/nginx/html
     restart: always
