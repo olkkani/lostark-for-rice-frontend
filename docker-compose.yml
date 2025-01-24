@@ -39,3 +39,5 @@ services:
       - /home/ec2-user/lfr-f/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - ./build:/usr/share/nginx/html
     restart: always
+    depends_on:
+      - blue
