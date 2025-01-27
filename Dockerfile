@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 RUN npm install -g serve
-EXPOSE 4137
+EXPOSE 3000
 CMD ["serve", "-s", "dist"]
 # 프로덕션 스테이지
 # FROM nginx:alpine
