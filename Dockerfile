@@ -5,11 +5,11 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
-EXPOSE 5173
+EXPOSE 4173
 
 # 프로덕션 스테이지
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/nginx.conf
-EXPOSE 5173
+EXPOSE 4173
 CMD ["nginx", "-g", "daemon off;"]
