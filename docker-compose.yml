@@ -5,7 +5,7 @@ networks:
 services:
   blue:
     container_name: lfr-f-blue
-    image: ${IMAGE_NAME:-ghcr.io/olkkani/lostark-for-rice-front:latest1}
+    image: ${IMAGE_NAME:-ghcr.io/olkkani/lostark-for-rice-front:latest}
     ports:
       - "3000:5173"
     networks:
@@ -16,7 +16,7 @@ services:
 
   green:
     container_name: lfr-f-green
-    image: ${IMAGE_NAME:-ghcr.io/olkkani/lostark-for-rice-front:latest1}
+    image: ${IMAGE_NAME:-ghcr.io/olkkani/lostark-for-rice-front:latest}
     ports:
       - "3001:5173"
     networks:
