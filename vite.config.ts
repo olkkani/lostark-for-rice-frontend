@@ -13,20 +13,6 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      port: 4173,
-      host: "0.0.0.0",
-      proxy: {
-        "/items": {
-          target: env.VITE_APP_API_URL,
-          // rewrite: (path) => path.replace(/^\/api/, ''),
-          changeOrigin: true,
-          secure: false,
-        },
-      },
-    },
-    preview: {
-      port: 4173,
-      host: "0.0.0.0",
       proxy: {
         "/items": {
           target: env.VITE_APP_API_URL,
