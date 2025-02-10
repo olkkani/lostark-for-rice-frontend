@@ -7,7 +7,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/entities/ui/table";
+} from "@/entities/shadcn/ui/table";
 import { useSelectedGemStore } from "@/features/headerView/model/useSelectedGemStore";
 
 const PriceRecordsTable: React.FC = () => {

@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import GemChart from "@/pages/GemChart.tsx";
+import GemChart from "@/pages/GemSPI";
 import "./App.css";
 import { ThemeProvider } from "./theme-provider";
 

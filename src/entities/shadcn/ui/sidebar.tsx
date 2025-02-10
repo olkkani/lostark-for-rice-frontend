@@ -5,17 +5,17 @@ import { PanelLeft } from "lucide-react";
 
 import { useIsMobile } from "@/features/preview/model/use-mobile";
 import { cn } from "@/shared/utils";
-import { Button } from "@/entities/ui/button";
-import { Input } from "@/entities/ui/input";
-import { Separator } from "@/entities/ui/separator";
-import { Sheet, SheetContent } from "@/entities/ui/sheet";
-import { Skeleton } from "@/entities/ui/skeleton";
+import { Button } from "@/entities/shadcn/ui/button";
+import { Input } from "@/entities/shadcn/ui/input";
+import { Separator } from "@/entities/shadcn/ui/separator";
+import { Sheet, SheetContent } from "@/entities/shadcn/ui/sheet";
+import { Skeleton } from "@/entities/shadcn/ui/skeleton";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/entities/ui/tooltip";
+} from "@/entities/shadcn/ui/tooltip";
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;

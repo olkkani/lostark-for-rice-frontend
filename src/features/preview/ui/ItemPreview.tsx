@@ -1,6 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/entities/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/entities/shadcn/ui/avatar";
 import * as React from "react";
-import { formatPercent, formatPrice } from "@/shared/util/formatter";
+import { formatPercent, formatPrice } from "@/entities/gem/model/formatter";
 import { clsx } from "clsx";
 
 const ItemPreview: React.FC<{

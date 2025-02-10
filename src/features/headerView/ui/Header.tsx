@@ -3,8 +3,8 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../../../entities/ui/avatar";
-import { formatPrice, formatPercent } from "@/shared/util/formatter";
+} from "../../../entities/shadcn/ui/avatar";
+import { formatPrice, formatPercent } from "@/entities/gem/model/formatter";
 import { ItemPrice } from "@/features/headerView/model/ItemResponse";
 import { Item } from "@/entities/gem/model/item";
 

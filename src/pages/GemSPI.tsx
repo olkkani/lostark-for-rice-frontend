@@ -6,7 +6,7 @@ import { ItemPrice } from "@/features/headerView/model/ItemResponse";
 import { getAllKindsItemPrice } from "@/features/headerView/api/item";
 import ChartTableComponent from "@/features/chart/ui/ChartTableComponent";
 import { useSelectedGemStore } from "@/features/headerView/model/useSelectedGemStore";
-import { ModeToggle } from "@/entities/ui/mode-toggle";
+import { ModeToggle } from "@/entities/shadcn/ui/mode-toggle";
 
 const gemsInfo: Item[] = Items;
 
