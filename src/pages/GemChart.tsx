@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import Header from "@/components/Header.tsx";
-import Aside from "@/components/Aside.tsx";
-import { Item, Items } from "@/model/item.ts";
-import { ItemPrice } from "@/features/dto/ItemResponse.ts";
-import { getAllKindsItemPrice } from "@/features/api/item.ts";
-import ChartTableComponent from "@/components/ChartTableComponent.tsx";
-import { useSelectedGemStore } from "@/store/useSelectedGemStore.ts";
-import { ModeToggle } from "@/components/mode-toggle";
+import Header from "@/features/headerView/ui/Header";
+import Aside from "@/features/preview/ui/Aside";
+import { Item, Items } from "@/entities/gem/model/item";
+import { ItemPrice } from "@/features/headerView/model/ItemResponse";
+import { getAllKindsItemPrice } from "@/features/headerView/api/item";
+import ChartTableComponent from "@/features/chart/ui/ChartTableComponent";
+import { useSelectedGemStore } from "@/features/headerView/model/useSelectedGemStore";
+import { ModeToggle } from "@/entities/ui/mode-toggle";
 
 const gemsInfo: Item[] = Items;
 
