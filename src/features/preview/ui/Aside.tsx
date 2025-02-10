@@ -1,7 +1,7 @@
 import React from "react";
 import { Item, Items } from "@/entities/gem/model/item";
 import { ItemPreviewResponse } from "@/features/headerView/model/ItemResponse";
-import ItemPreview from "@/entities/ItemPreview";
+import ItemPreview from "@/features/preview/ui/ItemPreview";
 
 const Aside: React.FC<{
   onClick: (id: number) => void;

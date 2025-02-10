@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPricesByItemCode } from "@/features/headerView/api/item";
 import { useSelectedGemStore } from "@/features/headerView/model/useSelectedGemStore";
 import { ItemPricesResponse } from "@/features/headerView/model/ItemResponse";
-import PriceTrendChart from "../../../entities/PriceTrendChart";
+import PriceTrendChart from "../../indexTable/ui/PriceTrendChart";
 import ChartComponent from "./ChartComponent";
 
 const ChartTableComponent: React.FC<{}> = () => {
