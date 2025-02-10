@@ -9,11 +9,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
-<<<<<<< HEAD
-        "@assets": path.resolve(__dirname, "./src/assets"),
-=======
         "@assets": path.resolve(__dirname, "./src/shared/assets"),
->>>>>>> develop
       },
     },
     server: {
