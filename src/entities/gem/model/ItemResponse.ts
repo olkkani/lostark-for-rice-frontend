@@ -38,7 +38,7 @@ export type IndexTrendResponse = {
 export const itemPreviewResponseCustomSort = (
   response: ItemPreviewResponse[]
 ) => {
-  const order = Items.map((it) => it.id);
+  const order = Items.map((item) => item.id);
   response.sort((a, b) => {
     const indexA = order.indexOf(a.itemCode);
     const indexB = order.indexOf(b.itemCode);

@@ -36,7 +36,6 @@ const GemSpi = () => {
 
     content = (
       <>
-        {/* <ModeToggle></ModeToggle> */}
         <div
           className={
             "grid grid-flow-row grid-cols-[1fr_auto] place-content-center h-screen gap-3"

@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import { getPricesByItemCode } from "@/entities/gem/api/item";
 import { useSelectedGemStore } from "@/entities/gem/model/useSelectedGemStore";
 import { ItemPricesResponse } from "@/entities/gem/model/ItemResponse";
-import PriceTrendChart from "./PriceTrendChart";
 import ChartComponent from "./ChartComponent";
 import IndexTable from "@/features/index-table/ui/IndexTrendTable";
 
