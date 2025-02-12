@@ -4,7 +4,7 @@ networks:
 
 services:
   blue:
-    container_name: lfr-f-blue
+    container_name: lfr-frontend
     image: ${IMAGE_NAME:-ghcr.io/olkkani/lostark-for-rice-front:latest}
     ports:
       - "3000:3000"
