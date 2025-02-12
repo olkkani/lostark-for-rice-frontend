@@ -17,19 +17,10 @@ import { useSelectedGemStore } from "@/entities/gem/model/useSelectedGemStore";
 import { getIndexTrendByItemCode } from "@/entities/gem/api/item";
 import { useQuery } from "@tanstack/react-query";
 import { formatPercent, formatPrice } from "@/shared/utils/formatter";
-
-// PriceIndex 타입 정의 (rate 값 포함)
-export type PriceIndex = {
-  date: string;
-  price: string;
-  prevGapPrice: number;
-  prevGapPriceRate: number;
-  pairGapPrice: number;
-  pairGapPriceRate: number;
-};
+import { IndexTrendResponse } from "@/entities/gem/model/ItemResponse";
 
 // itemCode에 따라 마지막 컬럼의 헤더를 동적으로 설정하는 함수
-const getColumns = (itemCode: number): ColumnDef<PriceIndex>[] => {
+const getColumns = (itemCode: number): ColumnDef<IndexTrendResponse>[] => {
   let pairGemName: string;
   switch (itemCode) {
     case 65031100:

@@ -6,7 +6,6 @@ import { ItemPreviewResponse } from "@/entities/gem/model/ItemResponse";
 import { getAllKindsItemPrice } from "@/entities/gem/api/item";
 import IndexTableComponent from "@/features/chart/ui/IndexTableComponent";
 import { useSelectedGemStore } from "@/entities/gem/model/useSelectedGemStore";
-import { ModeToggle } from "@/shared/shadcn/ui/mode-toggle";
 
 const gemsInfo: Item[] = Items;
 
