@@ -16,7 +16,7 @@ const GemSpi = () => {
   }
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["event-all-kind"],
+    queryKey: ["event-all-kind-item-price"],
     queryFn: getAllKindsItemPrice,
     staleTime: 5000,
   });
