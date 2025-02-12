@@ -1,8 +1,10 @@
 import ky from "ky";
 import {
+  IndexTrendResponse,
   ItemPreviewResponse,
+  itemPreviewResponseCustomSort,
   ItemPricesResponse,
-} from "@/features/headerView/model/ItemResponse";
+} from "@/entities/gem/model/ItemResponse";
 
 export interface ItemResponse {
   itemCode: number;
@@ -24,7 +26,9 @@ export async function getAllKindsItemPrice() {
   if (!response.ok) {
     throw new Error(`Fetch error: ${response.statusText}`);
   }
-  return await response.json<ItemPreviewResponse[]>();
+  return itemPreviewResponseCustomSort(
+    await response.json<ItemPreviewResponse[]>()
+  );
 }
 
 export async function getPricesByItemCode(itemCode: number) {
@@ -38,4 +42,17 @@ export async function getPricesByItemCode(itemCode: number) {
     throw new Error(`Fetch error: ${response.statusText}`);
   }
   return await response.json<ItemPricesResponse[]>();
+}
+
+export async function getIndexTrendByItemCode(itemCode: number) {
+  const response = await ky(`/items/${itemCode}/trend`, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    throw new Error(`Fetch error: ${response.statusText}`);
+  }
+  return await response.json<IndexTrendResponse[]>();
 }

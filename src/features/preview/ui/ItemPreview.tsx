@@ -1,10 +1,6 @@
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/entities/shadcn/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
 import * as React from "react";
-import { formatPercent, formatPrice } from "@/entities/gem/model/formatter";
+import { formatPercent, formatPrice } from "@/shared/utils/formatter";
 import { clsx } from "clsx";
 
 const ItemPreview: React.FC<{
@@ -20,9 +16,7 @@ const ItemPreview: React.FC<{
   return (
     <div
       onClick={() => props.onClick(props.gemInfo.id)}
-      className={clsx("grid grid-cols-[auto_1fr] grid-rows-2 gap-x-4", {
-        "order-first": props.isPairItem,
-      })}
+      className={clsx("grid grid-cols-[auto_1fr] grid-rows-2 gap-x-4")}
     >
       <Avatar className={"row-span-2 w-auto self-center"}>
         <AvatarImage src={props.gemInfo.image} />

@@ -1,23 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
-import Header from "@/features/headerView/ui/Header";
+import Header from "@/features/header/ui/Header";
 import Aside from "@/features/preview/ui/Aside";
 import { Item, Items } from "@/entities/gem/model/item";
-import { ItemPrice } from "@/features/headerView/model/ItemResponse";
-import { getAllKindsItemPrice } from "@/features/headerView/api/item";
-import ChartTableComponent from "@/features/chart/ui/ChartTableComponent";
-import { useSelectedGemStore } from "@/features/headerView/model/useSelectedGemStore";
-import { ModeToggle } from "@/entities/shadcn/ui/mode-toggle";
+import { ItemPreviewResponse } from "@/entities/gem/model/ItemResponse";
+import { getAllKindsItemPrice } from "@/entities/gem/api/item";
+import IndexTableComponent from "@/features/chart/ui/IndexTableComponent";
+import { useSelectedGemStore } from "@/entities/gem/model/useSelectedGemStore";
+import { ModeToggle } from "@/shared/shadcn/ui/mode-toggle";
 
 const gemsInfo: Item[] = Items;
 
-const GemChart = () => {
+const GemSpi = () => {
   const { selectedGem, selectGem } = useSelectedGemStore();
   function handlePreview(itemCode: number) {
     selectGem(gemsInfo.find((gem) => gem.id == itemCode) as Item);
   }
 
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["event"],
+    queryKey: ["event-all-kind"],
     queryFn: getAllKindsItemPrice,
     staleTime: 5000,
   });
@@ -30,12 +30,13 @@ const GemChart = () => {
 
   let content;
   if (data) {
-    const selectedGemPrice = data.find((gem) => gem.itemCode == selectedGem.id)!
-      .price as ItemPrice;
+    const selectedGemPrice = data.find(
+      (gem) => gem.itemCode == selectedGem.id
+    ) as ItemPreviewResponse;
 
     content = (
       <>
-        <ModeToggle></ModeToggle>
+        {/* <ModeToggle></ModeToggle> */}
         <div
           className={
             "grid grid-flow-row grid-cols-[1fr_auto] place-content-center h-screen gap-3"
@@ -43,7 +44,7 @@ const GemChart = () => {
         >
           <div className={"w-[45vw]"}>
             <Header gemInfo={selectedGem} gemPrice={selectedGemPrice} />
-            <ChartTableComponent />
+            <IndexTableComponent />
           </div>
           <Aside
             className={"rounded-lg bg-muted p-4 w-full h-full"}
@@ -59,4 +60,4 @@ const GemChart = () => {
   return <>{content}</>;
 };
 
-export default GemChart;
+export default GemSpi;

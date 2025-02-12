@@ -1,6 +1,6 @@
 import { createChart, ColorType } from "lightweight-charts";
 import React, { useEffect, useRef } from "react";
-import { ItemPricesResponse } from "@/features/headerView/model/ItemResponse";
+import { ItemPricesResponse } from "@/entities/gem/model/ItemResponse";
 
 const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = (props) => {
   const chartData = props.data;

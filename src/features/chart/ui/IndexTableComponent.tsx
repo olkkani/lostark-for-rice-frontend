@@ -1,12 +1,13 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getPricesByItemCode } from "@/features/headerView/api/item";
-import { useSelectedGemStore } from "@/features/headerView/model/useSelectedGemStore";
-import { ItemPricesResponse } from "@/features/headerView/model/ItemResponse";
-import PriceTrendChart from "../../indexTable/ui/PriceTrendChart";
+import { getPricesByItemCode } from "@/entities/gem/api/item";
+import { useSelectedGemStore } from "@/entities/gem/model/useSelectedGemStore";
+import { ItemPricesResponse } from "@/entities/gem/model/ItemResponse";
+import PriceTrendChart from "./PriceTrendChart";
 import ChartComponent from "./ChartComponent";
+import IndexTable from "@/features/index-table/ui/IndexTrendTable";
 
-const ChartTableComponent: React.FC<{}> = () => {
+const IndexTableComponent: React.FC<{}> = () => {
   const { selectedGem } = useSelectedGemStore();
 
   const { data, isLoading, isError, error } = useQuery({
@@ -42,11 +43,11 @@ const ChartTableComponent: React.FC<{}> = () => {
     content = (
       <>
         <ChartComponent data={responseData}></ChartComponent>
-        <PriceTrendChart></PriceTrendChart>
+        <IndexTable></IndexTable>
       </>
     );
   }
 
   return <>{content}</>;
 };
-export default ChartTableComponent;
+export default IndexTableComponent;

@@ -1,12 +1,12 @@
 import { Moon, Sun } from "lucide-react";
 
-import { Button } from "@/entities/shadcn/ui/button";
+import { Button } from "@/shared/shadcn/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/entities/shadcn/ui/dropdown-menu";
+} from "@/shared/shadcn/ui/dropdown-menu";
 import { useTheme } from "@/app/theme-provider";
 
 export function ModeToggle() {

@@ -6,7 +6,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/entities/shadcn/ui/table";
+} from "@/shared/shadcn/ui/table";
 import React from "react";
 
 const PriceTrendChart: React.FC = () => {

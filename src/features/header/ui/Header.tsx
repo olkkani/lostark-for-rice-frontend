@@ -1,16 +1,12 @@
 import * as React from "react";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "../../../entities/shadcn/ui/avatar";
-import { formatPrice, formatPercent } from "@/entities/gem/model/formatter";
-import { ItemPrice } from "@/features/headerView/model/ItemResponse";
+import { Avatar, AvatarFallback, AvatarImage } from "@/shared/shadcn/ui/avatar";
+import { formatPrice, formatPercent } from "@/shared/utils/formatter";
+import { ItemPreviewResponse } from "@/entities/gem/model/ItemResponse";
 import { Item } from "@/entities/gem/model/item";
 
 const Header: React.FC<{
   gemInfo: Item;
-  gemPrice: ItemPrice;
+  gemPrice: ItemPreviewResponse;
 }> = (props) => {
   const info = props.gemInfo;
   const price = props.gemPrice;

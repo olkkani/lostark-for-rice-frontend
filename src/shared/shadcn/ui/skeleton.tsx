@@ -1,4 +1,4 @@
-import { cn } from "@/shared/utils";
+import { cn } from "@/shared/shadcn/utils/utils";
 
 function Skeleton({
   className,
