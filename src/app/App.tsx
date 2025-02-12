@@ -1,9 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import GemSpi from "@/pages/GemSpi";
+import GemSPI from "@/pages/GemSPI.tsx";
+
 import "./App.css";
 
-const router = createBrowserRouter([{ path: "/", element: <GemSpi /> }]);
+const router = createBrowserRouter([{ path: "/", element: <GemSPI /> }]);
 function App() {
   return (
     // <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">

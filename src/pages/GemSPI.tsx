@@ -9,7 +9,7 @@ import { useSelectedGemStore } from "@/entities/gem/model/useSelectedGemStore";
 
 const gemsInfo: Item[] = Items;
 
-const GemSpi = () => {
+const GemSPI = () => {
   const { selectedGem, selectGem } = useSelectedGemStore();
   function handlePreview(itemCode: number) {
     selectGem(gemsInfo.find((gem) => gem.id == itemCode) as Item);
@@ -58,4 +58,4 @@ const GemSpi = () => {
   return <>{content}</>;
 };
 
-export default GemSpi;
+export default GemSPI;
