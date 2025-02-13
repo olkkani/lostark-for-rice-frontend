@@ -98,17 +98,18 @@ jobs:
 
             # certbot 컨테이너가 실행 중인지 확인하고 없으면 시작
             if ! docker ps -a --format "{{.Names}}" | grep -q "^certbot$"; then
-              docker-compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot -d $DOMAIN
+              docker compose -f $composePath run --rm --entrypoint "" certbot certonly --webroot --webroot-path=/var/www/certbot -d $DOMAIN
 
+              # 갱신용 certbot 컨테이너 기동
               docker compose -f $composePath pull certbot
               docker compose -f $composePath up -d certbot
             else
-              echo "Cerbot 컨테이너가 이미 존재합니다."
+              echo "cerbot 컨테이너가 이미 존재합니다."
             fi
 
 
             # 현재 활성 서비스 확인
-            ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-front-blue|lfr-f-green" | head -n1)
+            ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-front-blue|lfr-front-green" | head -n1)
 
             # 비활성 서비스 결정
             if [ "$ACTIVE_SERVICE" = "lfr-f-blue" ]; then
@@ -119,11 +120,11 @@ jobs:
               OLD_SERVICE="green"
             fi
 
-            # 이전 서비스 중지
+            echo "front 서비스 중지"
             docker stop lfr-frontend
             docker rm lfr-frontend
 
-            # 새 서비스 빌드 및 실행
+            echo "front 새 서비스 실행"
             IMAGE_NAME=${{ env.IMAGE_NAME }} docker compose -f $composePath pull blue
             IMAGE_NAME=${{ env.IMAGE_NAME }} docker compose -f $composePath up -d --no-deps blue
 
