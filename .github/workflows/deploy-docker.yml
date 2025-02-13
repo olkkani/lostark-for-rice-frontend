@@ -98,7 +98,7 @@ jobs:
 
             # certbot 컨테이너가 실행 중인지 확인하고 없으면 시작
             if ! docker ps -a --format "{{.Names}}" | grep -q "^certbot$"; then
-              docker compose -f $composePath run --rm --entrypoint "" certbot certonly --webroot --webroot-path=/var/www/certbot -d $DOMAIN
+              docker compose -f $composePath run --rm --entrypoint certbot certbot certonly --webroot --webroot-path=/var/www/certbot -d $DOMAIN
 
               # 갱신용 certbot 컨테이너 기동
               docker compose -f $composePath pull certbot
