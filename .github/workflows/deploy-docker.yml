@@ -106,6 +106,10 @@ jobs:
               OLD_SERVICE="green"
             fi
 
+            # 이전 서비스 중지
+            docker stop lfr-frontend
+            docker rm lfr-frontend
+
             # 새 서비스 빌드 및 실행
             IMAGE_NAME=${{ env.IMAGE_NAME }} docker compose -f $composePath pull blue
             IMAGE_NAME=${{ env.IMAGE_NAME }} docker compose -f $composePath up -d --no-deps blue
@@ -115,9 +119,6 @@ jobs:
             # 트래픽을 새 서비스로 전환 (예: Nginx 설정 업데이트)
             # 여기에 Nginx 설정 업데이트 로직 추가
 
-            # 이전 서비스 중지
-            docker stop lfr-frontend
-            docker rm lfr-frontend
 
             # 사용하지 않는 이미지 정리
             docker image prune -f
