@@ -94,6 +94,19 @@ jobs:
             cd /home/${{ secrets.USERNAME }}/lfr/front
             composePath="./docker-compose.yml"
 
+            DOMAIN="gemspi.kro.kr"
+
+            # certbot 컨테이너가 실행 중인지 확인하고 없으면 시작
+            if ! docker ps -a --format "{{.Names}}" | grep -q "^certbot$"; then
+              docker-compose run --rm certbot certonly --webroot --webroot-path=/var/www/certbot -d $DOMAIN
+
+              docker compose -f $composePath pull certbot
+              docker compose -f $composePath up -d certbot
+            else
+              echo "Cerbot 컨테이너가 이미 존재합니다."
+            fi
+
+
             # 현재 활성 서비스 확인
             ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-front-blue|lfr-f-green" | head -n1)
 
