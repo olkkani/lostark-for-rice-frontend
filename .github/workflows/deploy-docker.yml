@@ -110,7 +110,7 @@ jobs:
             if ! docker ps -a --format "{{.Names}}" | grep -q "^certbot$"; then
               docker compose -f $composePath pull certbot
 
-              docker compose -f $composePath run --rm --entrypoint certbot certbot certonly --non-interactive --agree-tos --email ahn.chanjin.96@gmail.com --webroot --webroot-path=/var/www/certbot/.well-known/acme-challenge -d $DOMAIN
+              docker compose -f $composePath run --rm --entrypoint certbot certbot certonly --non-interactive --agree-tos --email ahn.chanjin.96@gmail.com --webroot --webroot-path=/var/www/certbot -d $DOMAIN
 
               # 갱신용 certbot 컨테이너 기동
               docker compose -f $composePath up -d certbot
