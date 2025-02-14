@@ -39,6 +39,7 @@ services:
     volumes:
       - /home/ec2-user/lfr/front/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - /home/ec2-user/lfr/certs:/etc/letsencrypt
+      - /home/ec2-user/lfr/certbot/www:/var/www/certbot
   certbot:
     image: certbot/certbot
     container_name: certbot
