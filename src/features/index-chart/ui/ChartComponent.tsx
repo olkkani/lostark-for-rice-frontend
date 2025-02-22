@@ -1,5 +1,5 @@
 import { createChart, ColorType } from "lightweight-charts";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { ItemPricesResponse } from "@/entities/gem/model/ItemResponse";
 
 const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = (props) => {
@@ -10,17 +10,19 @@ const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = (props) => {
     lineColor: "#2962FF",
   };
 
-  const colors = {
-    backgroundColor: "white",
-    lineColor: lightTheme.lineColor,
-    textColor: "black",
-    upColor: "#26a69a",
-    downColor: "#ef5350",
-    borderVisible: false,
-    wickUpColor: "#26a69a",
-    wickDownColor: "#ef5350",
-  };
-
+  const colors = useMemo(
+    () => ({
+      backgroundColor: "white",
+      lineColor: lightTheme.lineColor,
+      textColor: "black",
+      upColor: "#26a69a",
+      downColor: "#ef5350",
+      borderVisible: false,
+      wickUpColor: "#26a69a",
+      wickDownColor: "#ef5350",
+    }),
+    [lightTheme.lineColor]
+  );
   useEffect(() => {
     const handleResize = () => {
       chart.applyOptions({ width: chartContainerRef.current!.clientWidth });

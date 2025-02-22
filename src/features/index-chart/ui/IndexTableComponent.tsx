@@ -42,7 +42,7 @@ const IndexTableComponent: React.FC<{}> = () => {
     content = (
       <>
         <ChartComponent data={responseData}></ChartComponent>
-        <IndexTable></IndexTable>
+        {/* <IndexTable></IndexTable> */}
       </>
     );
   }

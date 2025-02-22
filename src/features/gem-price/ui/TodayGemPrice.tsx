@@ -4,7 +4,7 @@ import { formatPrice, formatPercent } from "@/shared/utils/formatter";
 import { ItemPreviewResponse } from "@/entities/gem/model/ItemResponse";
 import { Item } from "@/entities/gem/model/item";
 
-const Header: React.FC<{
+const TodayGemPrice: React.FC<{
   gemInfo: Item;
   gemPrice: ItemPreviewResponse;
 }> = (props) => {
@@ -48,4 +48,4 @@ const Header: React.FC<{
   );
 };
 
-export default Header;
+export default TodayGemPrice;

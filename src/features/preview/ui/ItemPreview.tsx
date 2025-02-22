@@ -18,7 +18,7 @@ const ItemPreview: React.FC<{
       onClick={() => props.onClick(props.gemInfo.id)}
       className={clsx("grid grid-cols-[auto_1fr] grid-rows-2 gap-x-4")}
     >
-      <Avatar className={"row-span-2 w-auto self-center"}>
+      <Avatar className={"row-span-2 self-center"}>
         <AvatarImage src={props.gemInfo.image} />
         <AvatarFallback>Gem image</AvatarFallback>
       </Avatar>
