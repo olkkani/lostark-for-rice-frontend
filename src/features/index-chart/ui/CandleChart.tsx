@@ -22,7 +22,7 @@ const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = ({ data }) => {
       wickUpColor: "#ef4444",
       wickDownColor: "#3b82f6",
     }),
-    [lightTheme.lineColor]
+    [lightTheme.downColor, lightTheme.upColor]
   );
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = ({ data }) => {
       const dateStr =
         typeof param.time === "string"
           ? param.time
-          : new Date(param.time * 1000).toLocaleDateString();
+          : new Date((param.time as number) * 1000).toLocaleDateString();
 
       const closePrice = formatPrice(candle.close);
       // tooltip 내용에 캔들 데이터 표시 (시가, 고가, 저가, 종가)

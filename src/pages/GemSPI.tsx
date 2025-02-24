@@ -10,11 +10,9 @@ import {
   getAllKindsItemPrice,
   getPricesByItemCode,
 } from "@/entities/gem/api/item";
-import IndexTableComponent from "@/features/index-chart/ui/IndexTableComponent";
 import { useSelectedGemStore } from "@/entities/gem/model/useSelectedGemStore";
 import useDeviceSize from "@/shared/hooks/useDeviceSize";
 import clsx from "clsx";
-import ChartComponent from "@/features/index-chart/ui/ChartComponent";
 import IndexTable from "@/features/index-table/ui/IndexTrendTable";
 import CandleChart from "@/features/index-chart/ui/CandleChart";
 
@@ -62,8 +60,6 @@ const GemSPI = () => {
     const responseData = trend as ItemPricesResponse[];
     trendContent = (
       <>
-        {/* <ChartComponent data={responseData}></ChartComponent> */}
-
         <CandleChart data={responseData}></CandleChart>
         <IndexTable></IndexTable>
       </>

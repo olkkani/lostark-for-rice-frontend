@@ -4,7 +4,6 @@ import { getPricesByItemCode } from "@/entities/gem/api/item";
 import { useSelectedGemStore } from "@/entities/gem/model/useSelectedGemStore";
 import { ItemPricesResponse } from "@/entities/gem/model/ItemResponse";
 import ChartComponent from "./ChartComponent";
-import IndexTable from "@/features/index-table/ui/IndexTrendTable";
 
 const IndexTableComponent: React.FC<{}> = () => {
   const { selectedGem } = useSelectedGemStore();
