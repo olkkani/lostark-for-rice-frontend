@@ -10,11 +10,14 @@ export const formatPercent = (num: number): string => {
 };
 
 export const formatPrice = (num: number): string => {
-  return (
-    new Intl.NumberFormat("ko-KR", {
-      // signDisplay: 'exceptZero',
-    }).format(num) + "G"
-  );
+  const formatter = new Intl.NumberFormat("ko-KR");
+  return `${formatter.format(num)}G`;
+};
+
+export const formatPriceAndSign = (num: number): string => {
+  const formatter = new Intl.NumberFormat("ko-KR");
+  const sign = num > 0 ? "+" : "";
+  return `${sign}${formatter.format(num)}G`;
 };
 
 export const formatPriceWithNotSign = (num: number): string => {

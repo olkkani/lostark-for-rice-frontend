@@ -1,10 +1,13 @@
 import { createChart, ColorType, BarData } from "lightweight-charts";
 import React, { useEffect, useMemo, useRef } from "react";
 import { ItemPricesResponse } from "@/entities/gem/model/ItemResponse";
-import { formatPrice } from "@/shared/utils/formatter";
+import { formatPriceAndSign } from "@/shared/utils/formatter";
 
 const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = ({ data }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<any>(null);
+  const candleSeriesRef = useRef<any>(null);
+  const toolTipRef = useRef<HTMLDivElement | null>(null);
 
   const lightTheme = {
     lineColor: "#2962FF",
@@ -25,6 +28,7 @@ const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = ({ data }) => {
     [lightTheme.downColor, lightTheme.upColor]
   );
 
+  // 차트 및 시리즈는 컴포넌트 마운트 시 한 번만 생성
   useEffect(() => {
     if (!chartContainerRef.current) return;
     const container = chartContainerRef.current;
@@ -36,9 +40,10 @@ const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = ({ data }) => {
       width: container.clientWidth,
       height: 500,
     });
+    chartRef.current = chart;
     chart.timeScale().fitContent();
 
-    // 캔들 시리즈 생성 및 데이터 설정
+    // 캔들 시리즈 생성
     const candleSeries = chart.addCandlestickSeries({
       upColor: colors.upColor,
       downColor: colors.downColor,
@@ -46,7 +51,7 @@ const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = ({ data }) => {
       wickUpColor: colors.wickUpColor,
       wickDownColor: colors.wickDownColor,
     });
-    candleSeries.setData(data);
+    candleSeriesRef.current = candleSeries;
 
     // magnifier tooltip 엘리먼트 생성
     const toolTip = document.createElement("div");
@@ -75,8 +80,9 @@ const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = ({ data }) => {
     toolTip.style.color = "black";
     toolTip.style.borderColor = "#2962FF";
     container.appendChild(toolTip);
+    toolTipRef.current = toolTip;
 
-    // crosshair 이동에 따라 tooltip 업데이트 (magnifier tooltip 형식)
+    // crosshair 이동 시 tooltip 업데이트
     chart.subscribeCrosshairMove((param) => {
       if (
         param.point === undefined ||
@@ -100,17 +106,15 @@ const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = ({ data }) => {
           ? param.time
           : new Date((param.time as number) * 1000).toLocaleDateString();
 
-      const closePrice = formatPrice(candle.close);
-      // tooltip 내용에 캔들 데이터 표시 (시가, 고가, 저가, 종가)
+      const closePrice = formatPriceAndSign(candle.close);
       toolTip.innerHTML = `
         <div style="color: #2962FF; font-weight: bold;"></div>
         <div style="font-size: 14px; margin: 4px 0; color: black; text-align: center;">
-        가격: ${closePrice}<br/>
+          가격: ${closePrice}<br/>
         </div>
         <div style="color: black; text-align: center;">${dateStr}</div>
       `;
 
-      // magnifier tooltip은 차트 상단에 고정(위치는 timeScale에 맞춰 계산)
       const priceScaleWidth = chart.priceScale("left").width();
       const timeScaleWidth = chart.timeScale().width();
       const halfToolTipWidth = toolTipWidth / 2;
@@ -129,7 +133,14 @@ const ChartComponent: React.FC<{ data: ItemPricesResponse[] }> = ({ data }) => {
       window.removeEventListener("resize", handleResize);
       chart.remove();
     };
-  }, [data, colors]);
+  }, []); // 빈 dependency 배열로 한 번만 실행
+
+  // data가 변경될 때 기존 시리즈에 데이터 업데이트
+  useEffect(() => {
+    if (candleSeriesRef.current) {
+      candleSeriesRef.current.setData(data);
+    }
+  }, [data]);
 
   return <div ref={chartContainerRef} style={{ position: "relative" }} />;
 };

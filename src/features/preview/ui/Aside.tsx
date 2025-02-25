@@ -12,7 +12,7 @@ const Aside: React.FC<{
   const gemsInfo: Item[] = Items;
   const gems = props.gems;
 
-  const divClassName = `grid grid-flow-row content-start gap-4 ${
+  const divClassName = `grid grid-flow-row content-start gap-2 ${
     className || ""
   }`;
   return (
@@ -21,7 +21,7 @@ const Aside: React.FC<{
         <ItemPreview
           key={gem.itemCode}
           onClick={props.onClick}
-          isPairItem={gem.itemCode == props.selectedGem.pairItemId}
+          isSelectedItem={gem.itemCode == props.selectedGem.id}
           gemInfo={gemsInfo.find((info) => info.id == gem.itemCode) as Item}
           price={gem.price}
           priceChangeRate={gem.priceChangeRate}

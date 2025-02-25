@@ -16,7 +16,7 @@ import {
 import { useSelectedGemStore } from "@/entities/gem/model/useSelectedGemStore";
 import { getIndexTrendByItemCode } from "@/entities/gem/api/item";
 import { useQuery } from "@tanstack/react-query";
-import { formatPercent, formatPrice } from "@/shared/utils/formatter";
+import { formatPercent, formatPriceAndSign } from "@/shared/utils/formatter";
 import { IndexTrendResponse } from "@/entities/gem/model/ItemResponse";
 
 // itemCode에 따라 마지막 컬럼의 헤더를 동적으로 설정하는 함수
@@ -48,7 +48,7 @@ const getColumns = (itemCode: number): ColumnDef<IndexTrendResponse>[] => {
       header: "가격",
       cell: ({ getValue }) => {
         const price = Number(getValue());
-        return formatPrice(price);
+        return formatPriceAndSign(price);
       },
     },
     {
@@ -56,9 +56,9 @@ const getColumns = (itemCode: number): ColumnDef<IndexTrendResponse>[] => {
       header: "전날 비교",
       cell: ({ row, getValue }) => {
         const value = Number(getValue());
-        const gap = formatPrice(value);
+        const gap = formatPriceAndSign(value);
         const rate = formatPercent(row.original.prevGapPriceRate);
-        const colorClass = value > 0 ? "text-blue-500" : "text-red-500";
+        const colorClass = value > 0 ? "text-red-500" : "text-blue-500";
         return (
           <span className={colorClass}>
             {gap} ({rate})
@@ -71,9 +71,9 @@ const getColumns = (itemCode: number): ColumnDef<IndexTrendResponse>[] => {
       header: pairGemName + "의 비교",
       cell: ({ row, getValue }) => {
         const value = Number(getValue());
-        const gap = formatPrice(value);
+        const gap = formatPriceAndSign(value);
         const rate = formatPercent(row.original.pairGapPriceRate);
-        const colorClass = value > 0 ? "text-blue-500" : "text-red-500";
+        const colorClass = value > 0 ? "text-red-500" : "text-blue-500";
         return (
           <span className={colorClass}>
             {gap} ({rate})
