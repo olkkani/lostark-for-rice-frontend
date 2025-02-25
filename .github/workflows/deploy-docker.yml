@@ -8,7 +8,7 @@ on:
       - main
 env:
   IMAGE_NAME: ghcr.io/${{ github.repository }}:${{ github.sha }}
-
+  WORK_DIR: /home/${{ secrets.USERNAME }}/lfr/front
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -53,6 +53,34 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ env.IMAGE_NAME }}
+  serve-config-file:
+    runs-on: ubuntu-24.04
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Copy docker-compose.yml to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "./docker-compose.yml"
+          target: ${{ env.WORK_DIR }}
+          overwrite: true
+
+      - name: Copy nginx config to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "./nginx.conf"
+          target: ${{ env.WORK_DIR }}
+          overwrite: true
 
   deploy:
     runs-on: ubuntu-24.04
@@ -62,6 +90,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: serve-env
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            mkdir -p ${{ env.WORK_DIR }} && cd ${{ env.WORK_DIR }}
+            rm -f .env
+
+            echo "IMAGE_NAME=${{ env.IMAGE_NAME }}" >> .env
 
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.7
@@ -91,11 +132,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /home/${{ secrets.USERNAME }}/lfr/front
+            cd ${{ env.WORK_DIR }}
             composePath="./docker-compose.yml"
 
             DOMAIN="gemspi.kro.kr"
-
 
             # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
             if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
@@ -139,8 +179,8 @@ jobs:
             docker rm lfr-frontend
 
             echo "front 새 서비스 실행"
-            IMAGE_NAME=${{ env.IMAGE_NAME }} docker compose -f $composePath pull blue
-            IMAGE_NAME=${{ env.IMAGE_NAME }} docker compose -f $composePath up -d --no-deps blue
+            docker compose -f $composePath pull blue
+            docker compose -f $composePath up -d blue
 
             sleep 30  # 또는 더 정교한 헬스 체크 로직
 
