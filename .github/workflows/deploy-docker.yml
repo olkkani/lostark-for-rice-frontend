@@ -72,7 +72,7 @@ jobs:
             mkdir -p ${{ env.WORK_DIR }} && cd ${{ env.WORK_DIR }}
             rm -f .env
             echo "IMAGE_NAME=${{ env.IMAGE_NAME }}" >> .env
-      - name: Copy upstream
+      - name: Copy nginx front config
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
@@ -83,7 +83,7 @@ jobs:
           target: ${{ env.WORK_DIR}}
           overwrite: true
 
-      - name: Copy upstream
+      - name: Copy nginx front upstream
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
@@ -103,7 +103,7 @@ jobs:
           port: ${{ secrets.PORT }}
           source: "./.github/docker-compose.yml"
           target: ${{ env.WORK_DIR}}
-          overwrite: tru
+          overwrite: true
 
   nginx-cerbot:
     runs-on: ubuntu-24.04
