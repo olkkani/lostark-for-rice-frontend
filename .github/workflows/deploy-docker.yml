@@ -117,12 +117,12 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            COMPSE_PATH="${{ env.WORK_DIR }}/docker-compose.yml""
+            COMPSE_PATH="${{ env.WORK_DIR }}/docker-compose.yml"
 
             # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
             if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
-              docker compose -f $COMPOSE_PATH pull nginx
-              docker compose -f $COMPOSE_PATH up -d nginx
+              docker compose -f "$COMPOSE_PATH" pull nginx
+              docker compose -f "$COMPOSE_PATH" up -d nginx
             else
               echo "Nginx 컨테이너가 이미 존재합니다."
             fi
@@ -130,7 +130,7 @@ jobs:
             # certbot 컨테이너가 실행 중인지 확인하고 없으면 시작
             if ! docker ps -a --format "{{.Names}}" | grep -q "^certbot$"; then
               # 갱신용 certbot 컨테이너 기동
-              docker compose -f $COMPSE_PATH up -d certbot
+              docker compose -f "$COMPSE_PATH" up -d certbot
             else
               echo "cerbot 컨테이너가 이미 존재합니다."
             fi
