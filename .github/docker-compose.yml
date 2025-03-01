@@ -37,7 +37,10 @@ services:
     environment:
       - TZ=Asia/Seoul
     volumes:
-      - /home/ec2-user/lfr/front/nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - /home/ec2-user/lfr/nginx/frontend.conf:/etc/nginx/conf.d/frontend.conf
+      - /home/ec2-user/lfr/nginx/backend.conf:/etc/nginx/conf.d/backend.conf
+      - /home/ec2-user/lfr/nginx/front-actvie-upstream.conf:/etc/nginx/front-actvie-upstream.conf
+      - /home/ec2-user/lfr/nginx/back-active-upstream.conf:/etc/nginx/back-active-upstream.conf
       - /home/ec2-user/lfr/certs:/etc/letsencrypt
       - /home/ec2-user/lfr/certbot/www:/var/www/certbot
   certbot:

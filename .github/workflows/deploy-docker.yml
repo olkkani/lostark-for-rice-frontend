@@ -9,6 +9,7 @@ on:
 env:
   IMAGE_NAME: ghcr.io/${{ github.repository }}:${{ github.sha }}
   WORK_DIR: /home/${{ secrets.USERNAME }}/lfr/front
+  NGINX_DIR: "/home/${{ secrets.USERNAME }}/lfr/nginx/"
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -60,37 +61,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Copy docker-compose.yml to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          source: "./docker-compose.yml"
-          target: ${{ env.WORK_DIR }}
-          overwrite: true
-
-      - name: Copy nginx config to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          source: "./nginx.conf"
-          target: ${{ env.WORK_DIR }}
-          overwrite: true
-
-  deploy:
-    runs-on: ubuntu-24.04
-    needs: build
-    env:
-      HOST: ${{ secrets.HOST }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: serve-env
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -101,8 +71,28 @@ jobs:
           script: |
             mkdir -p ${{ env.WORK_DIR }} && cd ${{ env.WORK_DIR }}
             rm -f .env
-
             echo "IMAGE_NAME=${{ env.IMAGE_NAME }}" >> .env
+      - name: Copy upstream
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "./.github/nginx-config/front.conf"
+          target: ${{ env.WORK_DIR}}
+          overwrite: true
+
+      - name: Copy upstream
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "./.github/nginx-config/upstream/"
+          target: ${{ env.WORK_DIR}}
+          overwrite: true
 
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.7
@@ -111,19 +101,46 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          source: "./docker-compose.yml"
-          target: "/home/${{ secrets.USERNAME }}/lfr/front/"
+          source: "./.github/docker-compose.yml"
+          target: ${{ env.WORK_DIR}}
+          overwrite: tru
 
-      - name: Copy nginx config to server
-        uses: appleboy/scp-action@v0.1.7
+  nginx-cerbot:
+    runs-on: ubuntu-24.04
+    needs: serve-config-file
+    steps:
+      - name: start-nginx-cerbot
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          source: "./nginx.conf"
-          target: "/home/${{ secrets.USERNAME }}/lfr/front/"
+          script: |
+            COMPSE_PATH="${{ env.WORK_DIR }}/docker-compose.yml""
 
+            # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
+            if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
+              docker compose -f "$COMPOSE_PATH" pull nginx
+              docker compose -f "$COMPOSE_PATH" up -d nginx
+            else
+              echo "Nginx 컨테이너가 이미 존재합니다."
+            fi
+
+            # certbot 컨테이너가 실행 중인지 확인하고 없으면 시작
+            if ! docker ps -a --format "{{.Names}}" | grep -q "^certbot$"; then
+              # 갱신용 certbot 컨테이너 기동
+              docker compose -f $composePath up -d certbot
+            else
+              echo "cerbot 컨테이너가 이미 존재합니다."
+            fi
+
+  deploy:
+    runs-on: ubuntu-24.04
+    needs: nginx-cerbot
+    env:
+      HOST: ${{ secrets.HOST }}
+    steps:
       - name: Deploy
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -132,61 +149,34 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd ${{ env.WORK_DIR }}
-            composePath="./docker-compose.yml"
-
-            DOMAIN="gemspi.kro.kr"
-
-            # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
-            if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
-              docker compose -f $composePath pull nginx
-              docker compose -f $composePath up -d nginx
-            else
-              echo "Nginx 컨테이너가 이미 존재합니다."
-            fi
-
-
-            # certbot 컨테이너가 실행 중인지 확인하고 없으면 시작
-            if ! docker ps -a --format "{{.Names}}" | grep -q "^certbot$"; then
-              docker compose -f $composePath pull certbot
-              DOMAIN="gemspi.kro.kr"
-              docker compose -f $composePath run --rm --entrypoint certbot certbot certonly --non-interactive --agree-tos --email ahn.chanjin.96@gmail.com --webroot --webroot-path=/var/www/certbot -d $DOMAIN
-
-              sudo chown -R nginx:nginx /home/${{ secrets.USERNAME }}/lfr/certs
-              sudo chmod -R 755 /home/${{ secrets.USERNAME }}/lfr/certs
-
-              # 갱신용 certbot 컨테이너 기동
-              docker compose -f $composePath up -d certbot
-            else
-              echo "cerbot 컨테이너가 이미 존재합니다."
-            fi
-
-
+            COMPSE_PATH="${{ env.WORK_DIR }}/docker-compose.yml"
+            mkdir -p ${{ env.NGINX_DIR }}
+            cp -f ${{ env.WORK_DIR }}/front.conf ${{ env.NGINX_DIR }}/front.conf
             # 현재 활성 서비스 확인
             ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-front-blue|lfr-front-green" | head -n1)
-
-            # 비활성 서비스 결정
-            if [ "$ACTIVE_SERVICE" = "lfr-f-blue" ]; then
+            if [ "$ACTIVE_SERVICE" = "lfr-front-blue" ]; then
               NEW_SERVICE="green"
               OLD_SERVICE="blue"
+              cp -f ${{ env.WORK_DIR }}/upstream/green.conf ${{ env.NGINX_DIR }}/front-active-upstream.conf
             else
               NEW_SERVICE="blue"
               OLD_SERVICE="green"
+              cp -f ${{ env.WORK_DIR }}/upstream/blue.conf ${{ env.NGINX_DIR }}/back-active-upstream.conf
             fi
 
-            echo "front 서비스 중지"
-            docker stop lfr-frontend
-            docker rm lfr-frontend
+            # 새 서비스 실행
+            docker compose -f "$COMPSE_PATH" pull "$NEW_SERVICE"
+            docker compose -f "$COMPSE_PATH" up -d "$NEW_SERVICE"
 
-            echo "front 새 서비스 실행"
-            docker compose -f $composePath pull blue
-            docker compose -f $composePath up -d blue
+            # health check, Todo
+            sleep 15 
 
-            sleep 30  # 또는 더 정교한 헬스 체크 로직
+            # reload nginx config
+            docker exec -it nginx nginx -s reload
 
-            # 트래픽을 새 서비스로 전환 (예: Nginx 설정 업데이트)
-            # 여기에 Nginx 설정 업데이트 로직 추가
+            # 기존 서비스 종료
+            docker compose -f "$COMPSE_PATH" stop "$OLD_SERVICE"
+            docker compose -f "$COMPSE_PATH" rm "$OLD_SERVICE"
 
-
-            # 사용하지 않는 이미지 정리
+            # 사용하지 않는 이미지 삭제
             docker image prune -f
