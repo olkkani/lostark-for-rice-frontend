@@ -1,4 +1,4 @@
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import TodayGemPrice from "@/features/gem-price/ui/TodayGemPrice";
 import Aside from "@/features/preview/ui/Aside";
 import { Item, Items } from "@/entities/gem/model/item";
