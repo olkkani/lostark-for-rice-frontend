@@ -154,7 +154,7 @@ jobs:
           script: |
             COMPSE_PATH="${{ env.WORK_DIR }}/docker-compose.yml"
             mkdir -p ${{ env.NGINX_DIR }}
-            cp -f ${{ env.WORK_DIR }}/frontend.conf ${{ env.NGINX_DIR }}/frontend.conf
+            sudo cp -f ${{ env.WORK_DIR }}/frontend.conf ${{ env.NGINX_DIR }}/frontend.conf
             # 현재 활성 서비스 확인
             ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-front-blue|lfr-front-green" | head -n1)
             if [ "$ACTIVE_SERVICE" = "lfr-front-blue" ]; then
