@@ -7,8 +7,8 @@ on:
     branches:
       - main
 env:
-  IMAGE_NAME: ghcr.io/${{ github.repository }}:${{ github.sha }}
-  WORK_DIR: /home/${{ secrets.USERNAME }}/lfr/front
+  IMAGE_NAME: "ghcr.io/${{ github.repository }}:${{ github.sha }}"
+  WORK_DIR: "/home/${{ secrets.USERNAME }}/lfr/front/"
   NGINX_DIR: "/home/${{ secrets.USERNAME }}/lfr/nginx/"
 jobs:
   build:
@@ -71,7 +71,7 @@ jobs:
           source: "./.github/docker-compose.yml"
           target: ${{ env.WORK_DIR}}
           overwrite: true
-          strip_components: 1
+          strip_components: 2
 
       - name: Copy nginx front config
         uses: appleboy/scp-action@v0.1.7
