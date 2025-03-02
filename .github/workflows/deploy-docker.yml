@@ -81,7 +81,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           source: "./.github/nginx-config/upstream/"
-          target: "${{ env.WORK_DIR }}/upstream"
+          target: "${{ env.WORK_DIR }}"
           overwrite: true
           strip_components: 3
 
