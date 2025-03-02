@@ -61,6 +61,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Copy upstream
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "./.github/nginx-config/backend.conf"
+          target: ${{ env.WORK_DIR }}
+          overwrite: true
+          strip_components: 3
+
+      - name: Copy upstream conf files
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "./.github/nginx-config/upstream/"
+          target: "${{ env.WORK_DIR }}/upstream"
+          overwrite: true
+          strip_components: 3
+
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -72,30 +96,6 @@ jobs:
           target: ${{ env.WORK_DIR}}
           overwrite: true
           strip_components: 2
-
-      - name: Copy nginx front config
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          source: "./.github/nginx-config/frontend.conf"
-          target: ${{ env.WORK_DIR}}
-          overwrite: true
-          strip_components: 3
-
-      - name: Copy nginx front upstream
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          source: "./.github/nginx-config/upstream/"
-          target: ${{ env.WORK_DIR}}/upstream
-          overwrite: true
-          strip_components: 3
 
       - name: serve-env
         uses: appleboy/ssh-action@v1.0.3
@@ -154,17 +154,17 @@ jobs:
           script: |
             COMPSE_PATH="${{ env.WORK_DIR }}/docker-compose.yml"
             mkdir -p ${{ env.NGINX_DIR }}
-            sudo cp -f ${{ env.WORK_DIR }}/frontend.conf ${{ env.NGINX_DIR }}/frontend.conf
+            mv "${{ env.WORK_DIR }}/front.conf" "${{ env.NGINX_DIR }}/front.conf"
             # 현재 활성 서비스 확인
             ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-front-blue|lfr-front-green" | head -n1)
             if [ "$ACTIVE_SERVICE" = "lfr-front-blue" ]; then
               NEW_SERVICE="green"
               OLD_SERVICE="blue"
-              sudo cp -f ${{ env.WORK_DIR }}/upstream/green.conf ${{ env.NGINX_DIR }}/front-active-upstream.conf
+              mv "${{ env.WORK_DIR }}/upstream/green.conf" "${{ env.NGINX_DIR }}/front-active-upstream.conf"
             else
               NEW_SERVICE="blue"
               OLD_SERVICE="green"
-              sudo cp -f ${{ env.WORK_DIR }}/upstream/blue.conf ${{ env.NGINX_DIR }}/back-active-upstream.conf
+              mv "${{ env.WORK_DIR }}/upstream/blue.conf" "${{ env.NGINX_DIR }}/front-active-upstream.conf"
             fi
 
             # 새 서비스 실행
