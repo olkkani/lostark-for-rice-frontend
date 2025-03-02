@@ -70,7 +70,7 @@ jobs:
           port: ${{ secrets.PORT }}
           source: "./.github/docker-compose.yml"
           target: ${{ env.WORK_DIR}}
-          rm: true
+          overwrite: true
           strip_components: 1
 
       - name: Copy nginx front config
