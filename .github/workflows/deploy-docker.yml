@@ -160,11 +160,11 @@ jobs:
             if [ "$ACTIVE_SERVICE" = "lfr-front-blue" ]; then
               NEW_SERVICE="green"
               OLD_SERVICE="blue"
-              cp -f ${{ env.WORK_DIR }}/upstream/green.conf ${{ env.NGINX_DIR }}/front-active-upstream.conf
+              sudo cp -f ${{ env.WORK_DIR }}/upstream/green.conf ${{ env.NGINX_DIR }}/front-active-upstream.conf
             else
               NEW_SERVICE="blue"
               OLD_SERVICE="green"
-              cp -f ${{ env.WORK_DIR }}/upstream/blue.conf ${{ env.NGINX_DIR }}/back-active-upstream.conf
+              sudo cp -f ${{ env.WORK_DIR }}/upstream/blue.conf ${{ env.NGINX_DIR }}/back-active-upstream.conf
             fi
 
             # 새 서비스 실행
