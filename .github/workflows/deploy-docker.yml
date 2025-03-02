@@ -127,7 +127,7 @@ jobs:
             mv "${{ env.WORK_DIR }}/frontend.conf" "${{ env.NGINX_DIR }}/frontend.conf"
             # 현재 활성 서비스 확인
             ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-frontend-blue|lfr-frontend-green" | head -n1)
-            if [ "$ACTIVE_SERVICE" = "lfr-front-blue" ]; then
+            if [ "$ACTIVE_SERVICE" = "lfr-frontend-blue" ]; then
               NEW_SERVICE="green"
               OLD_SERVICE="blue"
               mv "${{ env.WORK_DIR }}/upstream/green.conf" "${{ env.NGINX_DIR }}/front-active-upstream.conf"
