@@ -108,44 +108,9 @@ jobs:
             cd ${{ env.WORK_DIR }}
             echo "IMAGE_NAME=${{ env.IMAGE_NAME }}" >> .env
 
-  nginx-cerbot:
-    runs-on: ubuntu-24.04
-    needs: serve-config-file
-    steps:
-      - name: start-nginx-cerbot
-        uses: appleboy/ssh-action@v1.2.0
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          script: |
-            COMPOSE_PATH="${{ env.WORK_DIR }}/docker-compose.yml"
-
-            # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
-            if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
-              docker compose -f "$COMPOSE_PATH" pull nginx
-              docker compose -f "$COMPOSE_PATH" up -d nginx
-            else
-              echo "Nginx 컨테이너가 이미 존재합니다."
-            fi
-
-            # certbot 컨테이너가 실행 중인지 확인하고 없으면 시작
-            if ! docker ps -a --format "{{.Names}}" | grep -q "^certbot$"; then
-              # 갱신용 certbot 컨테이너 기동
-              docker compose -f "$COMPOSE_PATH" pull certbot
-              DOMAIN="gemspi.kro.kr"
-              docker compose -f "$COMPOSE_PATH" run --rm --entrypoint certbot certbot certonly --non-interactive --agree-tos --email ahn.chanjin.96@gmail.com --webroot --webroot-path=/var/www/certbot -d "$DOMAIN"
-
-              sudo chown -R nginx:nginx /home/${{ secrets.USERNAME }}/lfr/certs
-              sudo chmod -R 755 /home/${{ secrets.USERNAME }}/lfr/certs
-            else
-              echo "cerbot 컨테이너가 이미 존재합니다."
-            fi
-
   deploy:
     runs-on: ubuntu-24.04
-    needs: nginx-cerbot
+    needs: serve-config-file
     env:
       HOST: ${{ secrets.HOST }}
     steps:
@@ -188,3 +153,38 @@ jobs:
 
             # 사용하지 않는 이미지 삭제
             docker image prune -f
+
+  nginx-cerbot:
+    runs-on: ubuntu-24.04
+    needs: deploy
+    steps:
+      - name: start-nginx-cerbot
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            COMPOSE_PATH="${{ env.WORK_DIR }}/docker-compose.yml"
+
+            # Nginx 컨테이너가 실행 중인지 확인하고 없으면 시작
+            if ! docker ps -a --format "{{.Names}}" | grep -q "^nginx$"; then
+              docker compose -f "$COMPOSE_PATH" pull nginx
+              docker compose -f "$COMPOSE_PATH" up -d nginx
+            else
+              echo "Nginx 컨테이너가 이미 존재합니다."
+            fi
+
+            # certbot 컨테이너가 실행 중인지 확인하고 없으면 시작
+            if ! docker ps -a --format "{{.Names}}" | grep -q "^certbot$"; then
+              # 갱신용 certbot 컨테이너 기동
+              docker compose -f "$COMPOSE_PATH" pull certbot
+              DOMAIN="gemspi.kro.kr"
+              docker compose -f "$COMPOSE_PATH" run --rm --entrypoint certbot certbot certonly --non-interactive --agree-tos --email ahn.chanjin.96@gmail.com --webroot --webroot-path=/var/www/certbot -d "$DOMAIN"
+
+              sudo chown -R nginx:nginx /home/${{ secrets.USERNAME }}/lfr/certs
+              sudo chmod -R 755 /home/${{ secrets.USERNAME }}/lfr/certs
+            else
+              echo "cerbot 컨테이너가 이미 존재합니다."
+            fi
