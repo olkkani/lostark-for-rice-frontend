@@ -82,6 +82,7 @@ jobs:
           source: "./.github/nginx-config/front.conf"
           target: ${{ env.WORK_DIR}}
           overwrite: true
+          strip_components: 2
 
       - name: Copy nginx front upstream
         uses: appleboy/scp-action@v0.1.7
@@ -91,8 +92,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
           source: "./.github/nginx-config/upstream/"
-          target: ${{ env.WORK_DIR}}
+          target: ${{ env.WORK_DIR}}/upstream
           overwrite: true
+          strip_components: 3
 
       - name: Copy docker-compose.yml to server
         uses: appleboy/scp-action@v0.1.7
@@ -104,6 +106,7 @@ jobs:
           source: "./.github/docker-compose.yml"
           target: ${{ env.WORK_DIR}}
           overwrite: true
+          strip_components: 1
 
   nginx-cerbot:
     runs-on: ubuntu-24.04
