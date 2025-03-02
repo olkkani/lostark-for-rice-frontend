@@ -8,8 +8,8 @@ on:
       - main
 env:
   IMAGE_NAME: "ghcr.io/${{ github.repository }}:${{ github.sha }}"
-  WORK_DIR: "/home/${{ secrets.USERNAME }}/lfr/front/"
-  NGINX_DIR: "/home/${{ secrets.USERNAME }}/lfr/nginx/"
+  WORK_DIR: "/home/${{ secrets.USERNAME }}/lfr/front"
+  NGINX_DIR: "/home/${{ secrets.USERNAME }}/lfr/nginx"
 jobs:
   build:
     runs-on: ubuntu-24.04
