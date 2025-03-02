@@ -179,7 +179,7 @@ jobs:
 
             # 기존 서비스 종료
             docker compose -f "$COMPSE_PATH" stop "$OLD_SERVICE"
-            docker compose -f "$COMPSE_PATH" rm "$OLD_SERVICE"
+            docker compose -f "$COMPSE_PATH" rm -f "$OLD_SERVICE"
 
             # 사용하지 않는 이미지 삭제
             docker image prune -f
