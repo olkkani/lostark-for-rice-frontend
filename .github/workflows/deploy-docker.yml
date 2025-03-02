@@ -61,18 +61,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Copy upstream
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.PORT }}
-          source: "./.github/nginx-config/frontend.conf"
-          target: ${{ env.WORK_DIR }}
-          overwrite: true
-          strip_components: 3
-
       - name: Copy upstream conf files
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -84,6 +72,18 @@ jobs:
           target: "${{ env.WORK_DIR }}"
           overwrite: true
           rm: true
+          strip_components: 3
+
+      - name: Copy upstream
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.PORT }}
+          source: "./.github/nginx-config/frontend.conf"
+          target: ${{ env.WORK_DIR }}
+          overwrite: true
           strip_components: 3
 
       - name: Copy docker-compose.yml to server
