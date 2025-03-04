@@ -81,7 +81,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.PORT }}
-          source: "./.github/nginx-config/frontend.conf"
+          source: "./.github/nginx-config/nginx.conf"
           target: ${{ env.WORK_DIR }}
           overwrite: true
           strip_components: 3
@@ -125,7 +125,7 @@ jobs:
           script: |
             COMPSE_PATH="${{ env.WORK_DIR }}/docker-compose.yml"
             mkdir -p ${{ env.NGINX_DIR }}
-            mv "${{ env.WORK_DIR }}/frontend.conf" "${{ env.NGINX_DIR }}/frontend.conf"
+            mv "${{ env.WORK_DIR }}/nginx.conf" "${{ env.NGINX_DIR }}/nginx.conf"
             # 현재 활성 서비스 확인
             ACTIVE_SERVICE=$(docker ps --format "{{.Names}}" | grep -E "lfr-frontend-blue|lfr-frontend-green" | head -n1)
             if [ "$ACTIVE_SERVICE" = "lfr-frontend-blue" ]; then
